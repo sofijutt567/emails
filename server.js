@@ -162,22 +162,22 @@ app.post('/api/invoice-email', async (req, res) => {
     sendSmtpEmail.htmlContent = `
         <html>
             <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; padding: 24px;">
-                <div style="max-width: 380px; margin: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 24px;">
+                <div style="max-width: 380px; margin: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 3px; padding: 26px 24px;">
 
-                    <!-- Shop Header (letterhead style: logo one side, details other side) -->
-                    <table style="width:100%; border-collapse:collapse; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
-                        <tr>
-                            ${shopLogo ? `
-                            <td style="width:52px; vertical-align:middle; padding-bottom:14px;">
-                                <img src="${shopLogo}" style="width:46px; height:46px; object-fit:contain; border-radius:8px; display:block;">
-                            </td>` : ''}
-                            <td style="vertical-align:middle; padding-bottom:14px; ${shopLogo ? 'padding-left:12px; text-align:left;' : 'text-align:center;'}">
-                                <div style="font-size:1.05rem; font-weight:700; color:#1e293b;">${shopName}</div>
-                                ${shopAddress ? `<div style="font-size:11px; color:#94a3b8; margin-top:2px;">${shopAddress}</div>` : ''}
-                                ${shopPhone ? `<div style="font-size:11px; color:#94a3b8;">Ph: ${shopPhone}</div>` : ''}
-                            </td>
-                        </tr>
-                    </table>
+                    <!-- Shop Header (centered, logo auto-scaled to fit) -->
+                    <div style="text-align:center; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
+                        ${shopLogo ? `
+                        <table style="margin:0 auto 8px;">
+                            <tr>
+                                <td style="width:52px; height:52px; text-align:center; vertical-align:middle;">
+                                    <img src="${shopLogo}" style="max-width:48px; max-height:40px; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto;">
+                                </td>
+                            </tr>
+                        </table>` : ''}
+                        <div style="font-size:1.05rem; font-weight:700; color:#1e293b;">${shopName}</div>
+                        ${shopAddress ? `<div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">${shopAddress}</div>` : ''}
+                        ${shopPhone ? `<div style="font-size:11.5px; color:#94a3b8;">Ph: ${shopPhone}</div>` : ''}
+                    </div>
 
                     <!-- Invoice label -->
                     <div style="text-align:center; margin:14px 0 12px; font-size:11px; letter-spacing:1.5px; color:#94a3b8; text-transform:uppercase;">Invoice ${billId ? '#' + billId.toString().slice(-6) : ''}</div>
