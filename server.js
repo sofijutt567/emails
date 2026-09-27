@@ -50,17 +50,17 @@ app.post('/api/welcome-email', async (req, res) => {
     sendSmtpEmail.subject = "🚀 Welcome to PharmPro - Account Active!";
     sendSmtpEmail.htmlContent = `
         <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f4f7fa; padding: 24px;">
-                <div style="max-width: 600px; margin: auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                    <div style="background: ${BRAND_COLOR}; padding: 24px; text-align: center;">
-                        <div style="color:#fff; font-size:1.3rem; font-weight:700;">PharmPro Cloud</div>
+            <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f4f7fa; padding: 24px;">
+                <div style="max-width: 480px; margin: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+                    <div style="padding: 24px 28px 8px; text-align: center; border-bottom: 1px dashed #e2e8f0; padding-bottom: 18px;">
+                        <div style="color:${BRAND_COLOR}; font-size:1.15rem; font-weight:700; letter-spacing:0.3px;">PharmPro Cloud</div>
                     </div>
-                    <div style="padding: 30px;">
-                        <h2 style="margin-top:0; color:#1e293b;">Hi ${userName || 'Pharmacist'},</h2>
-                        <p style="font-size: 15px; color: #475569; line-height: 1.6;">Welcome back! Your pharmacy management dashboard is now fully synced. You will receive automated alerts for low stock and expired medicines.</p>
-                        <p style="font-size: 13px; color: #94a3b8;">If you didn't login, please secure your account.</p>
+                    <div style="padding: 26px 28px;">
+                        <h2 style="margin-top:0; font-size:1.05rem; color:#1e293b;">Hi ${userName || 'Pharmacist'},</h2>
+                        <p style="font-size: 14px; color: #475569; line-height: 1.6;">Welcome back! Your pharmacy management dashboard is now fully synced. You will receive automated alerts for low stock and expired medicines.</p>
+                        <p style="font-size: 12.5px; color: #94a3b8;">If you didn't login, please secure your account.</p>
                     </div>
-                    <div style="background: #f8fafc; padding: 18px; text-align: center;">${FOOTER_HTML}</div>
+                    <div style="padding: 16px; text-align: center; border-top: 1px dashed #e2e8f0;">${FOOTER_HTML}</div>
                 </div>
             </body>
         </html>`;
@@ -148,58 +148,73 @@ app.post('/api/invoice-email', async (req, res) => {
         </tr>
     `).join('');
 
+    const itemsRowsPlain = items.map(i => `
+        <tr>
+            <td style="padding:6px 0; font-size:12.5px; color:#334155;">${i.name}</td>
+            <td style="padding:6px 0; font-size:12.5px; color:#334155; text-align:center;">${i.qty}</td>
+            <td style="padding:6px 0; font-size:12.5px; color:#334155; text-align:right;">${i.price}</td>
+            <td style="padding:6px 0; font-size:12.5px; color:#1e293b; text-align:right; font-weight:600;">${i.total}</td>
+        </tr>
+    `).join('');
+
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.subject = `Invoice from ${shopName}${billId ? ' - #' + billId.toString().slice(-6) : ''}`;
     sendSmtpEmail.htmlContent = `
         <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f4f7fa; padding: 24px;">
-                <div style="max-width: 600px; margin: auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; padding: 24px;">
+                <div style="max-width: 380px; margin: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 24px;">
 
-                    <table style="width:100%; background:${BRAND_COLOR};">
+                    <!-- Shop Header (plain, no color banner) -->
+                    <div style="text-align:center; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
+                        ${shopLogo ? `<img src="${shopLogo}" style="width:44px; height:44px; object-fit:contain; border-radius:8px; margin-bottom:8px;">` : ''}
+                        <div style="font-size:1.05rem; font-weight:700; color:#1e293b;">${shopName}</div>
+                        ${shopAddress ? `<div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">${shopAddress}</div>` : ''}
+                        ${shopPhone ? `<div style="font-size:11.5px; color:#94a3b8;">Ph: ${shopPhone}</div>` : ''}
+                    </div>
+
+                    <!-- Invoice label -->
+                    <div style="text-align:center; margin:14px 0 12px; font-size:11px; letter-spacing:1.5px; color:#94a3b8; text-transform:uppercase;">Invoice ${billId ? '#' + billId.toString().slice(-6) : ''}</div>
+
+                    <!-- Patient Info -->
+                    <div style="font-size:12.5px; color:#475569; padding:10px 0; border-top: 1px dashed #cbd5e1; border-bottom: 1px dashed #cbd5e1;">
+                        <div><strong>Patient:</strong> ${patientLine}</div>
+                        ${patient.phone ? `<div><strong>Mobile:</strong> ${patient.phone}</div>` : ''}
+                        ${patient.district ? `<div><strong>District:</strong> ${patient.district}</div>` : ''}
+                        <div><strong>Date:</strong> ${patient.date || ''}</div>
+                    </div>
+
+                    <!-- Items -->
+                    <table style="width:100%; border-collapse:collapse; margin-top:14px;">
+                        <thead>
+                            <tr>
+                                <th style="padding-bottom:6px; text-align:left; color:#94a3b8; font-size:10.5px; text-transform:uppercase; border-bottom:1px solid #e2e8f0;">Medicine</th>
+                                <th style="padding-bottom:6px; text-align:center; color:#94a3b8; font-size:10.5px; text-transform:uppercase; border-bottom:1px solid #e2e8f0;">Qty</th>
+                                <th style="padding-bottom:6px; text-align:right; color:#94a3b8; font-size:10.5px; text-transform:uppercase; border-bottom:1px solid #e2e8f0;">Price</th>
+                                <th style="padding-bottom:6px; text-align:right; color:#94a3b8; font-size:10.5px; text-transform:uppercase; border-bottom:1px solid #e2e8f0;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>${itemsRowsPlain}</tbody>
+                    </table>
+
+                    <!-- Totals -->
+                    <table style="width:100%; margin-top:14px; padding-top:12px; border-top: 1px dashed #cbd5e1; font-size:12.5px; color:#475569; border-collapse:collapse;">
                         <tr>
-                            <td style="padding:24px; width:60px;">
-                                ${shopLogo ? `<img src="${shopLogo}" style="width:48px; height:48px; object-fit:contain; border-radius:8px; background:#fff; padding:4px; display:block;">` : ''}
-                            </td>
-                            <td style="padding:24px 24px 24px 0; color:#fff;">
-                                <div style="font-size:1.2rem; font-weight:700;">${shopName}</div>
-                                ${shopAddress ? `<div style="font-size:0.8rem; opacity:0.9;">${shopAddress}</div>` : ''}
-                                ${shopPhone ? `<div style="font-size:0.8rem; opacity:0.9;">Ph: ${shopPhone}</div>` : ''}
-                            </td>
+                            <td style="padding:3px 0;">Subtotal</td>
+                            <td style="padding:3px 0; text-align:right;">Rs ${subtotal}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:3px 0;">Discount</td>
+                            <td style="padding:3px 0; text-align:right;">${discount || 0}%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:10px; border-top: 1px dashed #cbd5e1; font-size:1.05rem; font-weight:800; color:#1e293b;">Total</td>
+                            <td style="padding-top:10px; border-top: 1px dashed #cbd5e1; text-align:right; font-size:1.05rem; font-weight:800; color:#1e293b;">Rs ${bill}</td>
                         </tr>
                     </table>
 
-                    <div style="padding: 28px;">
-                        <h2 style="margin:0 0 16px; color:#1e293b;">Invoice</h2>
+                    <p style="margin-top:20px; font-size:12px; color:#64748b; text-align:center; font-style:italic;">${shopFooter}</p>
 
-                        <div style="background:#f8fafc; border-radius:8px; padding:14px 16px; margin-bottom:20px; font-size:0.9rem; color:#475569;">
-                            <div><strong>Patient:</strong> ${patientLine}</div>
-                            ${patient.phone ? `<div><strong>Mobile:</strong> ${patient.phone}</div>` : ''}
-                            ${patient.district ? `<div><strong>District:</strong> ${patient.district}</div>` : ''}
-                            <div><strong>Date:</strong> ${patient.date || ''}</div>
-                        </div>
-
-                        <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
-                            <thead>
-                                <tr style="background:#f1f5f9;">
-                                    <th style="padding:8px 10px; text-align:left; color:#64748b; font-size:0.75rem; text-transform:uppercase;">Medicine</th>
-                                    <th style="padding:8px 10px; text-align:center; color:#64748b; font-size:0.75rem; text-transform:uppercase;">Qty</th>
-                                    <th style="padding:8px 10px; text-align:right; color:#64748b; font-size:0.75rem; text-transform:uppercase;">Price</th>
-                                    <th style="padding:8px 10px; text-align:right; color:#64748b; font-size:0.75rem; text-transform:uppercase;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>${itemsRows}</tbody>
-                        </table>
-
-                        <div style="margin-top:16px; text-align:right; font-size:0.9rem; color:#475569;">
-                            <div>Subtotal: Rs ${subtotal}</div>
-                            <div>Discount: ${discount || 0}%</div>
-                            <div style="font-size:1.2rem; font-weight:800; color:${BRAND_COLOR}; margin-top:6px;">Total: Rs ${bill}</div>
-                        </div>
-
-                        <p style="margin-top:24px; font-size:0.85rem; color:#475569; text-align:center;">${shopFooter}</p>
-                    </div>
-
-                    <div style="background: #f8fafc; padding: 18px; text-align: center;">${FOOTER_HTML}</div>
+                    <div style="margin-top:16px; padding-top:14px; border-top: 1px dashed #cbd5e1; text-align:center;">${FOOTER_HTML}</div>
                 </div>
             </body>
         </html>`;
