@@ -169,8 +169,8 @@ app.post('/api/invoice-email', async (req, res) => {
                         ${shopLogo ? `
                         <table style="margin:0 auto 8px;">
                             <tr>
-                                <td style="width:52px; height:52px; text-align:center; vertical-align:middle;">
-                                    <img src="${shopLogo}" style="max-width:48px; max-height:40px; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto;">
+                                <td style="width:76px; height:66px; text-align:center; vertical-align:middle;">
+                                    <img src="${shopLogo}" style="max-width:72px; max-height:62px; width:auto; height:auto; object-fit:contain; display:block; margin:0 auto;">
                                 </td>
                             </tr>
                         </table>` : ''}
