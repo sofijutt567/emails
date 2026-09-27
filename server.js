@@ -65,7 +65,7 @@ app.post('/api/welcome-email', async (req, res) => {
             </body>
         </html>`;
     
-    sendSmtpEmail.sender = { "name": "PharmPro Support", "email": "supportpharmpro@gmail.com" };
+    sendSmtpEmail.sender = { "name": "PharmPro Support", "email": "info@pharmprolimtedhealthjobportal.com" };
     sendSmtpEmail.to = [{ "email": email }];
 
     try {
@@ -113,7 +113,7 @@ app.post('/api/stock-alert', async (req, res) => {
             </body>
         </html>`;
     
-    sendSmtpEmail.sender = { "name": "PharmPro Alerts", "email": "supportpharmpro@gmail.com" };
+    sendSmtpEmail.sender = { "name": "PharmPro Alerts", "email": "info@pharmprolimtedhealthjobportal.com" };
     sendSmtpEmail.to = [{ "email": email }];
 
     try {
@@ -204,7 +204,7 @@ app.post('/api/invoice-email', async (req, res) => {
             </body>
         </html>`;
 
-    sendSmtpEmail.sender = { "name": shopName, "email": "supportpharmpro@gmail.com" };
+    sendSmtpEmail.sender = { "name": shopName, "email": "info@pharmprolimtedhealthjobportal.com" };
     sendSmtpEmail.to = [{ "email": customerEmail }];
     if (replyToEmail) sendSmtpEmail.replyTo = { "email": replyToEmail, "name": shopName };
 
