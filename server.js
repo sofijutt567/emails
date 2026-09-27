@@ -164,13 +164,20 @@ app.post('/api/invoice-email', async (req, res) => {
             <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; padding: 24px;">
                 <div style="max-width: 380px; margin: auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 24px;">
 
-                    <!-- Shop Header (plain, no color banner) -->
-                    <div style="text-align:center; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
-                        ${shopLogo ? `<img src="${shopLogo}" style="width:44px; height:44px; object-fit:contain; border-radius:8px; margin-bottom:8px;">` : ''}
-                        <div style="font-size:1.05rem; font-weight:700; color:#1e293b;">${shopName}</div>
-                        ${shopAddress ? `<div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">${shopAddress}</div>` : ''}
-                        ${shopPhone ? `<div style="font-size:11.5px; color:#94a3b8;">Ph: ${shopPhone}</div>` : ''}
-                    </div>
+                    <!-- Shop Header (letterhead style: logo one side, details other side) -->
+                    <table style="width:100%; border-collapse:collapse; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
+                        <tr>
+                            ${shopLogo ? `
+                            <td style="width:52px; vertical-align:middle; padding-bottom:14px;">
+                                <img src="${shopLogo}" style="width:46px; height:46px; object-fit:contain; border-radius:8px; display:block;">
+                            </td>` : ''}
+                            <td style="vertical-align:middle; padding-bottom:14px; ${shopLogo ? 'padding-left:12px; text-align:left;' : 'text-align:center;'}">
+                                <div style="font-size:1.05rem; font-weight:700; color:#1e293b;">${shopName}</div>
+                                ${shopAddress ? `<div style="font-size:11px; color:#94a3b8; margin-top:2px;">${shopAddress}</div>` : ''}
+                                ${shopPhone ? `<div style="font-size:11px; color:#94a3b8;">Ph: ${shopPhone}</div>` : ''}
+                            </td>
+                        </tr>
+                    </table>
 
                     <!-- Invoice label -->
                     <div style="text-align:center; margin:14px 0 12px; font-size:11px; letter-spacing:1.5px; color:#94a3b8; text-transform:uppercase;">Invoice ${billId ? '#' + billId.toString().slice(-6) : ''}</div>
