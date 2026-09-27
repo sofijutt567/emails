@@ -159,8 +159,8 @@ app.post('/api/invoice-email', async (req, res) => {
 
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.subject = `Invoice from ${shopName}${billId ? ' - #' + billId.toString().slice(-6) : ''}`;
-    const ZIGZAG_TOP = `background-color:#f1f5f9; background-image: linear-gradient(-45deg, transparent 8px, #fdf8ef 8px), linear-gradient(45deg, transparent 8px, #fdf8ef 8px); background-size: 16px 16px; background-position: 0 0; background-repeat: repeat-x; height: 12px;`;
-    const ZIGZAG_BOTTOM = `background-color:#f1f5f9; background-image: linear-gradient(135deg, transparent 8px, #fdf8ef 8px), linear-gradient(-135deg, transparent 8px, #fdf8ef 8px); background-size: 16px 16px; background-position: 0 100%; background-repeat: repeat-x; height: 12px;`;
+    const ZIGZAG_TOP = `background-color:#f1f5f9; background-image: linear-gradient(-45deg, transparent 8px, #f3f2ef 8px), linear-gradient(45deg, transparent 8px, #f3f2ef 8px); background-size: 16px 16px; background-position: 0 0; background-repeat: repeat-x; height: 12px;`;
+    const ZIGZAG_BOTTOM = `background-color:#f1f5f9; background-image: linear-gradient(135deg, transparent 8px, #f3f2ef 8px), linear-gradient(-135deg, transparent 8px, #f3f2ef 8px); background-size: 16px 16px; background-position: 0 100%; background-repeat: repeat-x; height: 12px;`;
     sendSmtpEmail.htmlContent = `
         <html>
             <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; padding: 24px;">
@@ -169,7 +169,7 @@ app.post('/api/invoice-email', async (req, res) => {
                     <!-- Torn/zigzag receipt top edge -->
                     <div style="${ZIGZAG_TOP}"></div>
 
-                    <div style="background: #fdf8ef; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 22px 24px;">
+                    <div style="background: #f3f2ef; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 22px 24px;">
 
                     <!-- Shop Header (centered, logo auto-scaled to fit) -->
                     <div style="text-align:center; padding-bottom:16px; border-bottom: 1px dashed #cbd5e1;">
